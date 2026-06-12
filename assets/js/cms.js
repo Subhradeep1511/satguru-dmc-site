@@ -7,7 +7,7 @@
 ========================================================= */
 (function (window) {
   // ▼▼▼ SET THIS after deploying CMS to Vercel ▼▼▼
-  var PRODUCTION_CMS_URL = 'https://cms-liard-six.vercel.app';
+  var PRODUCTION_CMS_URL = 'https://cms-satguru1.vercel.app';
   // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
   var CMS_URL = 'http://localhost:3002';
