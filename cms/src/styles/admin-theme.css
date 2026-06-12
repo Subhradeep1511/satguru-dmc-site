@@ -1,0 +1,1098 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap');
+
+/* ═══════════════════════════════════════════════════════════════
+   SATGURU DMC  ·  Admin Theme v3
+   Strategy: override ALL Payload elevation vars for dark-on-light
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 0 · Design tokens (our own)
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --sg-green:        #22C55E;
+  --sg-green-dk:     #16A34A;
+  --sg-green-glow:   rgba(34, 197, 94, 0.14);
+  --sg-green-ring:   rgba(34, 197, 94, 0.28);
+
+  --sg-bg:           #0D0D12;
+  --sg-bg-alt:       #111118;
+  --sg-sidebar:      #08080E;
+  --sg-surface:      #16161E;
+  --sg-surface-2:    #1C1C26;
+  --sg-surface-3:    #22222E;
+
+  --sg-border:       #252534;
+  --sg-border-lt:    #1E1E2C;
+
+  --sg-text:         #EEEEF5;
+  --sg-text-2:       #8E8EA8;
+  --sg-text-3:       #52526A;
+
+  /* Legacy aliases — used by Dashboard component inline styles */
+  --body-bg:              var(--sg-bg);
+  --card-bg:              var(--sg-surface);
+  --sidebar-border:       var(--sg-border);
+  --card-border:          var(--sg-border-lt);
+  --text-primary:         var(--sg-text);
+  --text-secondary:       var(--sg-text-2);
+  --text-muted:           var(--sg-text-3);
+  --sidebar-link-hover-bg: rgba(255, 255, 255, 0.05);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 1 · Full Payload elevation system override
+   Payload uses rgb(var(--theme-elevation-N)) for all surfaces.
+   We remap: 0 = darkest bg → 1000 = near-white text.
+   ───────────────────────────────────────────────────────────── */
+html[data-theme='light'],
+html[data-theme='dark'] {
+  --theme-elevation-0:    13, 13, 18;
+  --theme-elevation-50:   17, 17, 24;
+  --theme-elevation-100:  22, 22, 30;
+  --theme-elevation-150:  26, 26, 38;
+  --theme-elevation-200:  32, 32, 46;
+  --theme-elevation-250:  39, 39, 55;
+  --theme-elevation-300:  47, 47, 65;
+  --theme-elevation-350:  57, 57, 78;
+  --theme-elevation-400:  68, 68, 92;
+  --theme-elevation-450:  82, 82, 108;
+  --theme-elevation-500:  98, 98, 126;
+  --theme-elevation-750:  146, 146, 170;
+  --theme-elevation-800:  164, 164, 186;
+  --theme-elevation-850:  182, 182, 202;
+  --theme-elevation-900:  202, 202, 220;
+  --theme-elevation-950:  222, 222, 238;
+  --theme-elevation-1000: 240, 240, 252;
+
+  /* Core Payload theme vars */
+  --theme-bg:           #0D0D12;
+  --theme-text:         #EEEEF5;
+  --theme-border-color: #252534;
+
+  /* Success palette → brand green */
+  --color-success-50:  #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-300: #86efac;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
+  --color-success-900: #14532d;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 2 · Global font + reset
+   ───────────────────────────────────────────────────────────── */
+html, body, *, *::before, *::after,
+input, textarea, select, button {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+a, a:link, a:visited, a:hover, a:focus, a:active { text-decoration: none !important; }
+
+*:focus-visible {
+  outline: 2px solid var(--sg-green) !important;
+  outline-offset: 2px !important;
+}
+
+::selection {
+  background: var(--sg-green-glow) !important;
+  color: var(--sg-text) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 3 · Page / shell background
+   ───────────────────────────────────────────────────────────── */
+html, body {
+  background: var(--sg-bg) !important;
+  color: var(--sg-text) !important;
+}
+
+#app, .app, main,
+.template-default__wrap,
+.app-content, .dashboard {
+  background: var(--sg-bg) !important;
+}
+
+body:has(.template-default),
+body:has(.app-content) {
+  background: var(--sg-bg) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 4 · Sidebar shell
+   ───────────────────────────────────────────────────────────── */
+.nav, nav, .nav__wrap, .nav-wrap,
+aside, .template-default aside, .template-default__nav,
+.nav__scroll, .nav__inner, .nav--theme, .sidebar {
+  background: var(--sg-sidebar) !important;
+  border-right: 1px solid var(--sg-border) !important;
+  box-shadow: none !important;
+}
+
+/* Remove any inner scroll container that could be white */
+.nav__scroll, .nav-scroll { background: var(--sg-sidebar) !important; }
+
+/* Kill the 60px gutter-h indent — all approaches combined */
+aside.nav .nav__scroll,
+.nav .nav__scroll {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-inline-start: 0 !important;
+  padding-inline-end: 0 !important;
+  --nav-padding-inline-start: 0px;
+  --nav-padding-inline-end: 0px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 5 · Sidebar list bullet / marker reset
+   ───────────────────────────────────────────────────────────── */
+.nav ul, .nav li, nav ul, nav li,
+aside ul, aside li, [class*='nav'] ul, [class*='nav'] li {
+  list-style: none !important;
+  list-style-type: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.nav li::before, nav li::before, aside li::before,
+.nav li::marker, nav li::marker, aside li::marker,
+.nav__link-indicator, .nav__link-indicator::before, .nav__link-indicator::after,
+.nav__link::before, .nav__link::after,
+.nav__link-label::before, .nav__link-label::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 6 · Sidebar header / logo area
+   ───────────────────────────────────────────────────────────── */
+.nav__header, .nav__logo, .nav-header {
+  background: var(--sg-sidebar) !important;
+  border-bottom: none !important;
+}
+
+/* Hide the two duplicate hamburger buttons — the template-default wrapper
+   and the AppHeader mobile toggler — both sit next to the logo and are
+   not needed on desktop. The nav__header-content collapse toggle stays. */
+.template-default__nav-toggler-wrapper,
+.template-default__nav-toggler-container,
+.template-default__nav-toggler,
+.app-header__mobile-nav-toggler {
+  display: none !important;
+}
+
+/* Hide the nav__header collapse toggle — sidebar is always open on desktop.
+   Payload's NavHamburger renders <button class="nav__mobile-close"> inside nav__header-content */
+.nav__header-content .nav-toggler,
+.nav__header-content .hamburger,
+.nav__mobile-close,
+.nav__header-content button {
+  display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 7 · Sidebar group labels
+   ───────────────────────────────────────────────────────────── */
+
+/* Group container — actual Payload class is nav-group (no underscores) */
+.nav-group {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: none !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+/* Divider before every group except the first */
+.nav-group + .nav-group {
+  margin-top: 6px !important;
+  padding-top: 14px !important;
+  position: relative !important;
+}
+.nav-group + .nav-group::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 7px !important;
+  left: 12px !important;
+  right: 12px !important;
+  height: 1px !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  display: block !important;
+}
+
+/* Group label text — left-aligned, matches nav link indent */
+.nav-group__label {
+  color: var(--sg-text-3) !important;
+  text-align: left !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.14em !important;
+  padding: 8px 8px 4px 8px !important;
+}
+
+/* Tiny colored square dot before every group label */
+.nav-group__label::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 4px !important;
+  height: 4px !important;
+  background: var(--sg-green) !important;
+  border-radius: 2px !important;
+  opacity: 0.5 !important;
+  flex-shrink: 0 !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 8 · Sidebar nav links
+   ───────────────────────────────────────────────────────────── */
+
+/* Base text color */
+.nav__link, .nav a, nav a, aside a,
+.nav-group__toggle, .nav-group__label {
+  color: var(--sg-text) !important;
+}
+
+/* Nav links — layout + shape */
+.nav__link {
+  border-radius: 7px !important;
+  margin: 1px 8px !important;
+  padding: 8px 12px 8px 14px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  text-align: left !important;
+  gap: 9px !important;
+  transition: background 0.14s ease, color 0.14s ease !important;
+  position: relative !important;
+  cursor: pointer !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  letter-spacing: 0.01em !important;
+}
+
+/* Group toggle button — block so label flows naturally to the left */
+.nav-group__toggle {
+  display: block !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  text-align: left !important;
+}
+
+/* Hide the collapse chevron — sidebar is always open on desktop */
+.nav-group__indicator {
+  display: none !important;
+}
+
+/* Small dash indicator before every link */
+.nav__link .nav__link-label::before,
+.nav__link > span::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 4px !important;
+  height: 4px !important;
+  border-radius: 50% !important;
+  background: var(--sg-text-3) !important;
+  margin-right: 7px !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
+  transition: background 0.14s ease !important;
+}
+
+/* Hover */
+.nav__link:hover, .nav__group-toggle:hover, .nav-group__toggle:hover,
+.nav a:hover, nav a:hover {
+  background: rgba(255, 255, 255, 0.055) !important;
+  color: var(--sg-text) !important;
+}
+.nav__link:hover .nav__link-label::before,
+.nav__link:hover > span::before {
+  background: var(--sg-green) !important;
+}
+
+/* Active — Payload renders active nav links as <div class="nav__link"> */
+div.nav__link,
+.nav__link--active,
+a.nav__link[aria-current='page'] {
+  background: var(--sg-green-glow) !important;
+  color: #4ADE80 !important;
+  font-weight: 600 !important;
+}
+div.nav__link .nav__link-label::before,
+div.nav__link > span::before,
+.nav__link--active .nav__link-label::before,
+.nav__link--active > span::before {
+  background: var(--sg-green) !important;
+  opacity: 1 !important;
+}
+
+/* Active left accent bar */
+div.nav__link::after,
+.nav__link--active::after {
+  content: '' !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 20% !important;
+  bottom: 20% !important;
+  width: 3px !important;
+  background: var(--sg-green) !important;
+  border-radius: 0 3px 3px 0 !important;
+  display: block !important;
+}
+
+/* Nav icons */
+.nav__link svg, .nav__group-toggle svg {
+  width: 14px !important;
+  height: 14px !important;
+  flex-shrink: 0 !important;
+  opacity: 0.7 !important;
+}
+
+/* Collapsed sidebar */
+.nav--collapsed .nav__link, [class*='nav--collapsed'] .nav__link {
+  padding: 9px !important;
+  justify-content: center !important;
+  margin: 2px 8px !important;
+}
+.nav--collapsed .nav__link::before, [class*='nav--collapsed'] .nav__link::before {
+  display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 9 · Sidebar footer + nav controls (logout, account)
+   ───────────────────────────────────────────────────────────── */
+.nav__footer, .nav-footer {
+  padding: 10px 12px !important;
+  background: var(--sg-sidebar) !important;
+  border-top: 1px solid var(--sg-border) !important;
+}
+.nav__footer *, .nav-footer * {
+  color: var(--sg-text) !important;
+  font-size: 14px !important;
+}
+
+/* Nav controls bar (holds logout + account icon buttons) */
+.nav__controls,
+[class*='nav__controls'] {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 8px 10px !important;
+  background: var(--sg-sidebar) !important;
+  border-top: 1px solid var(--sg-border) !important;
+}
+
+/* Each icon button inside controls (logout, account) */
+.nav__controls-btn,
+[class*='nav__controls-btn'],
+.nav__logout,
+[class*='nav__logout'] {
+  color: var(--sg-text) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 7px !important;
+  padding: 7px 9px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  transition: background 0.14s ease, color 0.14s ease !important;
+  text-decoration: none !important;
+}
+.nav__controls-btn:hover,
+[class*='nav__controls-btn']:hover,
+.nav__logout:hover,
+[class*='nav__logout']:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--sg-text) !important;
+}
+.nav__controls-btn svg,
+[class*='nav__controls-btn'] svg,
+.nav__logout svg {
+  width: 15px !important;
+  height: 15px !important;
+  color: var(--sg-text-2) !important;
+  stroke: currentColor !important;
+  flex-shrink: 0 !important;
+}
+.nav__controls-btn:hover svg,
+[class*='nav__controls-btn']:hover svg {
+  color: var(--sg-text) !important;
+}
+
+/* Sidebar collapse/expand toggle */
+.nav__toggle,
+[class*='nav__toggle'],
+button[class*='toggle'][class*='nav'] {
+  color: var(--sg-text-2) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 7px !important;
+  padding: 7px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: start !important;
+  transition: background 0.14s ease, color 0.14s ease !important;
+}
+.nav__toggle:hover,
+[class*='nav__toggle']:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--sg-text) !important;
+}
+.nav__toggle svg,
+[class*='nav__toggle'] svg {
+  width: 15px !important;
+  height: 15px !important;
+  color: var(--sg-text-2) !important;
+  stroke: currentColor !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 10 · Logo image
+   ───────────────────────────────────────────────────────────── */
+nav img[alt="Satguru DMC"],
+header img[alt="Satguru DMC"],
+[class*="nav"] img[alt="Satguru DMC"],
+[class*="logo"] img[alt="Satguru DMC"] {
+  display: block !important;
+  margin: 0 auto !important;
+  max-height: 52px !important;
+  width: auto !important;
+  transition: transform 0.2s ease !important;
+}
+nav img[alt="Satguru DMC"]:hover,
+[class*="nav"] img[alt="Satguru DMC"]:hover {
+  transform: scale(1.03) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 11 · Top header bar
+   ───────────────────────────────────────────────────────────── */
+.app-header, header, .header__ {
+  background: var(--sg-sidebar) !important;
+  border-bottom: 1px solid var(--sg-border) !important;
+  box-shadow: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 12 · Cards, panels, collection views
+   ───────────────────────────────────────────────────────────── */
+.collection-list,
+.render-fields,
+.document-fields,
+.list-header,
+.table-wrap,
+.card,
+.payload-card {
+  background: var(--sg-surface) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4),
+              0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  transition: box-shadow 0.2s ease !important;
+}
+
+.collection-list:hover, .render-fields:hover {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5),
+              0 6px 24px rgba(0, 0, 0, 0.25) !important;
+}
+
+.list-header {
+  border-radius: 14px 14px 0 0 !important;
+  padding: 16px 20px !important;
+  border-bottom: 1px solid var(--sg-border) !important;
+  background: var(--sg-surface) !important;
+}
+
+.table-wrap {
+  border-radius: 0 0 14px 14px !important;
+  border-top: none !important;
+}
+
+/* Document edit sidebar */
+.document-sidebar, .doc-sidebar {
+  background: var(--sg-bg) !important;
+  border-left: 1px solid var(--sg-border) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 13 · Tables
+   ───────────────────────────────────────────────────────────── */
+table {
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  width: 100% !important;
+}
+
+table thead tr th {
+  background: var(--sg-bg-alt) !important;
+  color: var(--sg-text-3) !important;
+  border-bottom: 1px solid var(--sg-border) !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.10em !important;
+  padding: 11px 16px !important;
+  white-space: nowrap !important;
+}
+
+table tbody tr {
+  background: var(--sg-surface) !important;
+  transition: background 0.12s ease !important;
+}
+
+table tbody tr + tr {
+  border-top: 1px solid var(--sg-border-lt) !important;
+}
+
+table tbody tr:last-child td:first-child { border-bottom-left-radius: 14px !important; }
+table tbody tr:last-child td:last-child  { border-bottom-right-radius: 14px !important; }
+
+table tbody tr:hover { background: var(--sg-surface-2) !important; }
+
+table tbody tr td {
+  color: var(--sg-text-2) !important;
+  padding: 12px 16px !important;
+  font-size: 13px !important;
+}
+
+table tbody tr td a {
+  color: var(--sg-text) !important;
+  font-weight: 500 !important;
+  transition: color 0.14s !important;
+}
+table tbody tr td a:hover { color: var(--sg-green) !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 14 · Buttons
+   ───────────────────────────────────────────────────────────── */
+
+/* Primary */
+.btn--style-primary,
+.btn.primary,
+.btn[class*='primary'],
+button[class*='btn--style-primary'],
+a[class*='btn--style-primary'] {
+  background: var(--sg-green) !important;
+  border-color: var(--sg-green) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  box-shadow: 0 2px 8px var(--sg-green-ring) !important;
+  transition: background 0.16s ease, box-shadow 0.16s ease, transform 0.12s ease !important;
+}
+.btn--style-primary:hover, button[class*='btn--style-primary']:hover,
+a[class*='btn--style-primary']:hover, .btn.primary:hover {
+  background: var(--sg-green-dk) !important;
+  border-color: var(--sg-green-dk) !important;
+  box-shadow: 0 4px 14px var(--sg-green-ring) !important;
+  transform: translateY(-1px) !important;
+}
+.btn--style-primary:active, button[class*='btn--style-primary']:active {
+  transform: translateY(1px) !important;
+  box-shadow: 0 1px 4px var(--sg-green-ring) !important;
+}
+
+/* Secondary */
+.btn--style-secondary,
+.btn.secondary,
+.btn[class*='secondary'],
+.collection-list__header-actions a.btn,
+.collection-list__header-actions button.btn {
+  background: var(--sg-surface-2) !important;
+  border: 1px solid var(--sg-border) !important;
+  color: var(--sg-text-2) !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  font-size: 13px !important;
+  transition: all 0.16s ease !important;
+  box-shadow: none !important;
+}
+.btn--style-secondary:hover, .btn.secondary:hover,
+.collection-list__header-actions a.btn:hover,
+.collection-list__header-actions button.btn:hover {
+  border-color: var(--sg-green) !important;
+  color: var(--sg-green) !important;
+  background: var(--sg-green-glow) !important;
+  transform: translateY(-1px) !important;
+}
+.btn--style-secondary:active, .btn.secondary:active {
+  transform: translateY(1px) !important;
+}
+
+.pill { border-radius: 20px !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 15 · Form inputs & labels
+   ───────────────────────────────────────────────────────────── */
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'],
+input[type='search'],
+input[type='url'],
+input[type='tel'],
+textarea,
+select,
+.field-type,
+.rs__control {
+  background: var(--sg-bg-alt) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 8px !important;
+  color: var(--sg-text) !important;
+  font-size: 13px !important;
+  padding: 10px 12px !important;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease !important;
+}
+
+input:focus, textarea:focus, select:focus,
+.field-type:focus-within, .rs__control--is-focused {
+  border-color: var(--sg-green) !important;
+  box-shadow: 0 0 0 3px var(--sg-green-glow) !important;
+  outline: none !important;
+  background: var(--sg-surface) !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--sg-text-3) !important;
+  opacity: 1 !important;
+}
+
+/* Bare search input inside dashboard pill — strip all field styling */
+input.sg-search-bare,
+input.sg-search-bare:focus {
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  outline: none !important;
+  font-size: 12.5px !important;
+}
+
+.field-label, label {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em !important;
+  margin-bottom: 5px !important;
+  color: var(--sg-text-2) !important;
+  display: block !important;
+}
+
+.field-description {
+  font-size: 11.5px !important;
+  color: var(--sg-text-3) !important;
+  margin-top: 4px !important;
+}
+
+.checkbox, .toggle, input[type='checkbox'], input[type='radio'] {
+  accent-color: var(--sg-green) !important;
+}
+
+/* Fix react-select value container — Payload sets text-align:center which clips selected values */
+.rs__value-container {
+  text-align: left !important;
+}
+.rs__single-value {
+  overflow: visible !important;
+}
+
+/* React-Select dropdown */
+.rs__menu, .rs__menu-list {
+  background: var(--sg-surface-2) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 8px !important;
+}
+.rs__option:hover, .rs__option--is-focused {
+  background: var(--sg-green-glow) !important;
+  color: var(--sg-text) !important;
+}
+.rs__option--is-selected {
+  background: var(--sg-green-glow) !important;
+  color: var(--sg-green) !important;
+}
+.rs__single-value, .rs__multi-value__label, .rs__input {
+  color: var(--sg-text) !important;
+}
+.rs__multi-value {
+  background: var(--sg-surface-3) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 5px !important;
+}
+.rs__indicator { color: var(--sg-text-3) !important; }
+.rs__indicator:hover { color: var(--sg-green) !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 16 · Rich text / Lexical editor
+   ───────────────────────────────────────────────────────────── */
+.rich-text, .lexical {
+  background: var(--sg-bg-alt) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 10px !important;
+  color: var(--sg-text) !important;
+}
+.rich-text:focus-within, .lexical:focus-within {
+  border-color: var(--sg-green) !important;
+  box-shadow: 0 0 0 3px var(--sg-green-glow) !important;
+}
+
+.toolbar {
+  background: var(--sg-surface-2) !important;
+  border-bottom: 1px solid var(--sg-border) !important;
+  border-radius: 10px 10px 0 0 !important;
+  padding: 6px 8px !important;
+}
+.toolbar button {
+  border-radius: 5px !important;
+  color: var(--sg-text-2) !important;
+  transition: background 0.14s ease, color 0.14s ease !important;
+}
+.toolbar button:hover {
+  background: var(--sg-surface-3) !important;
+  color: var(--sg-text) !important;
+}
+.toolbar button.active, .toolbar button[aria-pressed='true'] {
+  background: var(--sg-green-glow) !important;
+  color: var(--sg-green) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 17 · File upload / drop zone
+   ───────────────────────────────────────────────────────────── */
+.upload, .drop-zone {
+  background: var(--sg-bg-alt) !important;
+  border: 2px dashed var(--sg-border) !important;
+  border-radius: 10px !important;
+  color: var(--sg-text-2) !important;
+  transition: border-color 0.16s ease, background 0.16s ease !important;
+}
+.upload:hover, .drop-zone:hover,
+.upload.drag-over, .drop-zone.drag-over {
+  border-color: var(--sg-green) !important;
+  background: var(--sg-green-glow) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 18 · Pagination
+   ───────────────────────────────────────────────────────────── */
+.pagination button {
+  background: var(--sg-surface-2) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 6px !important;
+  color: var(--sg-text-2) !important;
+  min-width: 32px !important;
+  height: 32px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  transition: all 0.14s ease !important;
+}
+.pagination button:hover {
+  border-color: var(--sg-green) !important;
+  color: var(--sg-green) !important;
+  background: var(--sg-green-glow) !important;
+}
+.pagination button[aria-current='true'],
+.pagination button.active {
+  background: var(--sg-green) !important;
+  border-color: var(--sg-green) !important;
+  color: #fff !important;
+  box-shadow: 0 3px 10px var(--sg-green-ring) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 19 · Toast notifications
+   ───────────────────────────────────────────────────────────── */
+.toast, .notification {
+  background: var(--sg-surface-2) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 12px !important;
+  color: var(--sg-text) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+              0 2px 8px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 20 · Modals & drawers
+   ───────────────────────────────────────────────────────────── */
+.modal {
+  background: var(--sg-surface) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6),
+              0 8px 24px rgba(0, 0, 0, 0.35) !important;
+  color: var(--sg-text) !important;
+}
+.modal__header, .drawer__header {
+  border-bottom: 1px solid var(--sg-border) !important;
+  padding: 18px 22px !important;
+}
+.modal__footer, .drawer__footer {
+  border-top: 1px solid var(--sg-border) !important;
+  padding: 14px 22px !important;
+}
+
+/* Overlay / backdrop */
+.overlay, [class*='overlay'] {
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 21 · Drawer (slide-in panels)
+   ───────────────────────────────────────────────────────────── */
+.drawer {
+  background: var(--sg-surface) !important;
+  border-left: 1px solid var(--sg-border) !important;
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 22 · Popover / dropdown menus
+   ───────────────────────────────────────────────────────────── */
+.popup, .dropdown, .popover,
+[class*='popup__'], [class*='dropdown__'] {
+  background: var(--sg-surface-2) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4),
+              0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+.popup__scroll, .dropdown__scroll { background: transparent !important; }
+
+/* Menu items */
+.popup button, .dropdown button, .popover button,
+[class*='popup__'] button, [class*='dropdown__'] a {
+  color: var(--sg-text-2) !important;
+  border-radius: 6px !important;
+  transition: background 0.12s ease, color 0.12s ease !important;
+}
+.popup button:hover, .dropdown button:hover,
+[class*='popup__'] button:hover, [class*='dropdown__'] a:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--sg-text) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 23 · Typography hierarchy
+   ───────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700 !important;
+  color: var(--sg-text) !important;
+}
+
+.view-description h1, .collection h1, .document h1 {
+  font-size: 20px !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Breadcrumbs / step nav */
+.step-nav, .breadcrumb {
+  font-size: 12px !important;
+  color: var(--sg-text-3) !important;
+}
+.step-nav a:hover { color: var(--sg-green) !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 24 · Dashboard card action icons
+   ───────────────────────────────────────────────────────────── */
+[class*='card__actions'] a,
+[class*='card__actions'] button {
+  color: var(--sg-text-2) !important;
+  transition: color 0.14s ease, border-color 0.14s ease !important;
+}
+[class*='card__actions'] svg,
+[class*='card__actions'] path,
+[class*='card__actions'] circle,
+[class*='card__actions'] line,
+[class*='card__actions'] polyline {
+  stroke: var(--sg-text-2) !important;
+  fill: none !important;
+}
+[class*='card__actions'] a:hover,
+[class*='card__actions'] button:hover {
+  color: var(--sg-green) !important;
+  border-color: var(--sg-green) !important;
+}
+[class*='card__actions'] a:hover svg,
+[class*='card__actions'] a:hover path,
+[class*='card__actions'] button:hover svg {
+  stroke: var(--sg-green) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 25 · Relationship field selected value chips
+   ───────────────────────────────────────────────────────────── */
+
+/* Chip / pill — the selected value bubble in relationship fields */
+.chip,
+[class*='chip'],
+.relationship-field__value,
+[class*='relationship'] .pill,
+.array-field__row-label {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: var(--sg-surface-3) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 8px !important;
+  padding: 4px 10px 4px 10px !important;
+  font-size: 12.5px !important;
+  font-weight: 500 !important;
+  color: var(--sg-text) !important;
+  max-width: 100% !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* The remove (×) button inside a chip */
+.chip__button,
+[class*='chip'] button,
+[class*='chip'] [class*='button'],
+.relationship-field__value button {
+  background: transparent !important;
+  border: none !important;
+  color: var(--sg-text-3) !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  transition: color 0.14s ease !important;
+}
+.chip__button:hover,
+[class*='chip'] button:hover {
+  color: #EF4444 !important;
+}
+
+/* Relationship field container */
+.relationship-field,
+[class*='relationship-field'] {
+  background: var(--sg-bg-alt) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 8px !important;
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 4px !important;
+  padding: 6px 10px !important;
+  color: var(--sg-text) !important;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease !important;
+}
+.relationship-field:focus-within,
+[class*='relationship-field']:focus-within {
+  border-color: var(--sg-green) !important;
+  box-shadow: 0 0 0 3px var(--sg-green-glow) !important;
+}
+
+/* The text input inside the relationship field */
+.relationship-field input,
+[class*='relationship-field'] input {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  color: var(--sg-text) !important;
+  min-width: 60px !important;
+}
+.relationship-field input:focus,
+[class*='relationship-field'] input:focus {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Relationship dropdown popup */
+.relationship-field__popup,
+[class*='relationship-field__popup'],
+[class*='list-drawer'],
+[class*='relationship__popup'] {
+  background: var(--sg-surface-2) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important;
+  z-index: 100 !important;
+}
+
+/* Dropdown option rows */
+[class*='relationship-field__popup'] button,
+[class*='relationship__popup'] button,
+[class*='list-drawer'] .relationship-field__option {
+  color: var(--sg-text-2) !important;
+  padding: 8px 14px !important;
+  border-radius: 6px !important;
+  transition: background 0.12s ease, color 0.12s ease !important;
+}
+[class*='relationship-field__popup'] button:hover,
+[class*='relationship__popup'] button:hover {
+  background: var(--sg-surface-3) !important;
+  color: var(--sg-text) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 25b · Status / badge pills
+   ───────────────────────────────────────────────────────────── */
+.pill, .status, [class*='status--'], [class*='badge'] {
+  border-radius: 20px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 3px 9px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 26 · Dividers
+   ───────────────────────────────────────────────────────────── */
+hr, .divider { border-color: var(--sg-border) !important; }
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 27 · Code / pre blocks
+   ───────────────────────────────────────────────────────────── */
+code, pre {
+  background: var(--sg-surface-3) !important;
+  border: 1px solid var(--sg-border) !important;
+  border-radius: 6px !important;
+  color: #86EFAC !important;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace !important;
+  font-size: 12.5px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 28 · Scrollbars
+   ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--sg-border);
+  border-radius: 20px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--sg-green); }
+
+/* ─────────────────────────────────────────────────────────────
+   SECTION 29 · Animations
+   ───────────────────────────────────────────────────────────── */
+@keyframes sgFadeUp {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+.render-fields, .collection-list {
+  animation: sgFadeUp 0.2s ease-out;
+}

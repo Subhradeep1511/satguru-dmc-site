@@ -1,0 +1,34 @@
+{
+  "name": "satguru-dmc-cms",
+  "version": "1.0.0",
+  "description": "Satguru DMC Russia — Payload CMS Backend",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node scripts/pre-init.mjs && next dev --port 3002",
+    "build": "node scripts/pre-init.mjs && next build",
+    "start": "node scripts/pre-init.mjs && next start --port 3002",
+    "generate:types": "payload generate:types",
+    "generate:importmap": "payload generate:importmap"
+  },
+  "dependencies": {
+    "@payloadcms/db-sqlite": "^3.0.0",
+    "@payloadcms/next": "^3.0.0",
+    "@payloadcms/richtext-lexical": "^3.0.0",
+    "@payloadcms/ui": "^3.0.0",
+    "graphql": "^16.14.0",
+    "next": "15.5.19",
+    "payload": "^3.0.0",
+    "react": "^19.1.2",
+    "react-dom": "^19.1.2",
+    "sharp": "^0.35.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "5.6.3"
+  },
+  "engines": {
+    "node": "^18.20.2 || >=20.9.0"
+  }
+}

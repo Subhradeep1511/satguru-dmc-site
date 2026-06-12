@@ -1,0 +1,15 @@
+{
+  "workspaces": [
+    "cms"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w cms",
+    "build": "npm run build -w cms",
+    "start": "concurrently --names \"HTML,CMS\" --prefix-colors \"cyan,magenta\" \"node server.js\" \"cross-env NODE_OPTIONS=--max_old_space_size=4096 npm run dev -w cms\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3",
+    "cross-env": "^10.1.0",
+    "sharp": "^0.34.5"
+  }
+}

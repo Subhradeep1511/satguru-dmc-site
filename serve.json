@@ -1,0 +1,10 @@
+{
+  "cleanUrls": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/explore", "destination": "/explore.html" },
+    { "source": "/explore/:city", "destination": "/explore/index.html" },
+    { "source": "/itinerary/:slug", "destination": "/itinerary/index.html" },
+    { "source": "/:page", "destination": "/:page.html" }
+  ]
+}

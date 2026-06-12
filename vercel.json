@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/explore/:path+", "destination": "/explore/index.html" },
+    { "source": "/itinerary/:path+", "destination": "/itinerary/index.html" },
+    { "source": "/about",              "destination": "/about.html" },
+    { "source": "/contact",            "destination": "/contact.html" },
+    { "source": "/explore",            "destination": "/explore.html" },
+    { "source": "/media",              "destination": "/media.html" },
+    { "source": "/services",           "destination": "/services.html" },
+    { "source": "/mice",               "destination": "/mice.html" },
+    { "source": "/popular-itineraries","destination": "/popular-itineraries.html" },
+    { "source": "/travel-tips",        "destination": "/travel-tips.html" },
+    { "source": "/travel-themes",      "destination": "/travel-themes.html" },
+    { "source": "/featured-experiences","destination": "/featured-experiences.html" },
+    { "source": "/our-network",        "destination": "/our-network.html" },
+    { "source": "/meet-our-team",      "destination": "/meet-our-team.html" },
+    { "source": "/brand-association",  "destination": "/brand-association.html" },
+    { "source": "/saint-petersburg",   "destination": "/saint-petersburg.html" },
+    { "source": "/moscow",             "destination": "/moscow.html" },
+    { "source": "/sochi",              "destination": "/sochi.html" },
+    { "source": "/murmansk",           "destination": "/murmansk.html" },
+    { "source": "/golden-ring",        "destination": "/golden-ring.html" }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    }
+  ]
+}

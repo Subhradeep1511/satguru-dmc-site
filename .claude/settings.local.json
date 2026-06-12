@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(node -e \"const fs=require\\('fs'\\);let css=fs.readFileSync\\('assets/css/main.css','utf8'\\);let min=css.replace\\(/\\\\/\\\\*[\\\\s\\\\S]*?\\\\*\\\\//g,''\\).replace\\(/\\\\s*\\\\n\\\\s*/g,' '\\).replace\\(/\\\\s*{\\\\s*/g,'{'\\).replace\\(/\\\\s*}\\\\s*/g,'}'\\).replace\\(/\\\\s*:\\\\s*/g,':'\\).replace\\(/\\\\s*;\\\\s*/g,';'\\).replace\\(/\\\\s*,\\\\s*/g,','\\).replace\\(/  +/g,' '\\).trim\\(\\);fs.writeFileSync\\('assets/css/main.min.css',min\\);console.log\\('done'\\);\")",
+      "Bash(python3)",
+      "Bash(python3 -c ' *)",
+      "Bash(dir \"C:\\\\Users\\\\pcpix\\\\Downloads\\\\dmc\\\\assets\\\\img\" /b)",
+      "WebFetch(domain:cdn.jsdelivr.net)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(powershell -Command \"\\(Get-Content 'C:\\\\Users\\\\pcpix\\\\Downloads\\\\dmc\\\\assets\\\\css\\\\main.css'\\).Count\")"
+    ]
+  }
+}
