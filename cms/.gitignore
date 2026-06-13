@@ -2,6 +2,7 @@ node_modules/
 .next/
 satguru-cms.db
 *.db
+!seed.db
 .env
 .env.local
 *.tsbuildinfo

@@ -1,4 +1,5 @@
 import path from 'path'
+import { existsSync, copyFileSync } from 'fs'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
@@ -26,6 +27,19 @@ import { PackageBannerSlides } from './collections/PackageBannerSlides'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// ── Cold-start: copy bundled seed.db to /tmp if no DB exists yet ─────────────
+if (process.env.NODE_ENV === 'production' && !existsSync('/tmp/satguru-cms.db')) {
+  const seedPath = path.join(process.cwd(), 'seed.db')
+  if (existsSync(seedPath)) {
+    try {
+      copyFileSync(seedPath, '/tmp/satguru-cms.db')
+      console.log('[payload] Copied seed.db → /tmp/satguru-cms.db')
+    } catch (e) {
+      console.warn('[payload] Could not copy seed.db:', e)
+    }
+  }
+}
 
 // ── Seed data — 6 tour packages from satgurutravel.ru/dmc/ ───────────────────
 const SEED_TOUR_PACKAGES = [
@@ -450,7 +464,9 @@ export default buildConfig({
   db: sqliteAdapter({
     client: process.env.TURSO_DATABASE_URL
       ? { url: process.env.TURSO_DATABASE_URL, authToken: process.env.TURSO_AUTH_TOKEN }
-      : { url: process.env.DATABASE_URI || `file:${path.resolve(dirname, '../satguru-cms.db')}` },
+      : { url: process.env.NODE_ENV === 'production'
+            ? 'file:/tmp/satguru-cms.db'
+            : (process.env.DATABASE_URI || `file:${path.resolve(dirname, '../satguru-cms.db')}`) },
     push: true,
     prodMigrations: [{ name: '20240101_initial', up: migration0Up, down: migration0Down }],
   }),

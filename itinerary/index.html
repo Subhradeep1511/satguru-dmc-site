@@ -54,7 +54,7 @@
 
                     <!-- SIDEBAR -->
                     <div class="col-xl-3 col-lg-4" id="sidebarCol">
-                        <div class="dest-sidebar-sticky" id="stickySidebar">
+                        <div class="sticky-top" style="top: 96px;">
                             <div class="dest-sidebar-card">
                                 <div class="sidebar-card-header">
                                     <h6>Itinerary Summary</h6>
@@ -91,72 +91,6 @@
     <script src="../assets/js/itinerary-detail.js"></script>
     <script src="../assets/js/section-indicator.js"></script>
 
-    <script>
-    (function () {
-        var TOP = 96;
-        var sidebar, col, section;
-        var state = 'normal'; // 'normal' | 'fixed' | 'parked'
-
-        function init() {
-            sidebar = document.getElementById('stickySidebar');
-            col     = document.getElementById('sidebarCol');
-            section = document.querySelector('.dest-detail-section');
-            return !!(sidebar && col && section);
-        }
-
-        function toNormal() {
-            if (state === 'normal') return;
-            state = 'normal';
-            col.style.minHeight = '';
-            sidebar.style.left = '';
-            sidebar.classList.remove('is-fixed', 'is-bottom');
-        }
-
-        function toFixed() {
-            if (state === 'fixed') return;
-            state = 'fixed';
-            col.style.minHeight = sidebar.offsetHeight + 'px';
-            sidebar.style.left = '';
-            sidebar.classList.remove('is-bottom');
-            sidebar.classList.add('is-fixed');
-        }
-
-        function toParked() {
-            if (state === 'parked') return;
-            state = 'parked';
-            col.style.minHeight = sidebar.offsetHeight + 'px';
-            var secLeft = section.getBoundingClientRect().left;
-            sidebar.style.left = (264 - secLeft) + 'px';
-            sidebar.classList.remove('is-fixed');
-            sidebar.classList.add('is-bottom');
-        }
-
-        function onScroll() {
-            if (!sidebar && !init()) return;
-            if (window.innerWidth <= 991) { toNormal(); return; }
-            var sr       = section.getBoundingClientRect();
-            var sidebarH = sidebar.offsetHeight;
-
-            if (sr.top >= TOP) {
-                toNormal();
-            } else if (sr.bottom <= sidebarH + TOP) {
-                toParked();
-            } else {
-                toFixed();
-            }
-        }
-
-        function start() {
-            if (!init()) { setTimeout(start, 400); return; }
-            window.addEventListener('scroll', onScroll, { passive: true });
-            window.addEventListener('resize', function () { toNormal(); onScroll(); }, { passive: true });
-            onScroll();
-        }
-
-        window.addEventListener('load', function () { setTimeout(start, 300); });
-        setTimeout(start, 1000);
-    })();
-    </script>
 
 </body>
 </html>
