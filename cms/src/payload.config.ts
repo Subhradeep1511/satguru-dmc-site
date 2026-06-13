@@ -4,7 +4,6 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
-import { up as migration0Up, down as migration0Down } from './migrations/20240101_initial.js'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -466,8 +465,9 @@ export default buildConfig({
       : { url: process.env.NODE_ENV === 'production'
             ? 'file:/tmp/satguru-cms.db'
             : (process.env.DATABASE_URI || `file:${path.resolve(dirname, '../satguru-cms.db')}`) },
-    push: true,
-    prodMigrations: [{ name: '20240101_initial', up: migration0Up, down: migration0Down }],
+    // push only in dev — in production seed.db already has correct schema;
+    // an interactive y/N prompt from Drizzle would hang a serverless function
+    push: process.env.NODE_ENV !== 'production',
   }),
   upload: {
     limits: {
