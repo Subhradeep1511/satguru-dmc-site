@@ -40,6 +40,19 @@ const nextConfig = {
       { protocol: 'http', hostname: 'localhost' },
     ],
   },
+  // Ensure seed.db and Linux sharp binaries are bundled into serverless output
+  outputFileTracingIncludes: {
+    '/admin/[[...segments]]': [
+      './seed.db',
+      './node_modules/@img/sharp-linux-x64/**/*',
+      './node_modules/@img/sharp-libvips-linux-x64/**/*',
+    ],
+    '/api/[...slug]': [
+      './seed.db',
+      './node_modules/@img/sharp-linux-x64/**/*',
+      './node_modules/@img/sharp-libvips-linux-x64/**/*',
+    ],
+  },
 }
 
 export default withPayload(nextConfig)
