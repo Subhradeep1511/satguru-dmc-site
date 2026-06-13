@@ -2,7 +2,6 @@ import path from 'path'
 import { existsSync, copyFileSync } from 'fs'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
-import sharp from 'sharp'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { up as migration0Up, down as migration0Down } from './migrations/20240101_initial.js'
@@ -470,7 +469,6 @@ export default buildConfig({
     push: true,
     prodMigrations: [{ name: '20240101_initial', up: migration0Up, down: migration0Down }],
   }),
-  sharp: sharp as any,
   upload: {
     limits: {
       fileSize: 10_000_000, // 10MB
