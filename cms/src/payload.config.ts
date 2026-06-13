@@ -404,6 +404,138 @@ export default buildConfig({
       }
     } catch (_) {}
 
+    // ── Backfill imageUrl for all records whose uploaded files don't exist on Vercel ──
+    // /tmp DB is ephemeral so this runs every cold start; all updates are idempotent.
+    const CDN = 'https://satgurutravel.ru/dmc/wp-content/uploads'
+    const noImg = (v: any) => !v  // catches null, undefined, ''
+
+    // Tour packages
+    try {
+      const PKG_URLS: Record<string,string> = {
+        'Murmansk':         CDN+'/2022/02/aerial-view-of-murmansk-in-the-summer-2021-10-13-17-03-10-utc.jpg',
+        'Moscow':           CDN+'/2022/01/siberian-winter-inspiration_t20_z2x4J4-scaled.jpg',
+        'Golden Ring':      CDN+'/2021/12/golden-ring-3.jpg',
+        'Kazan':            CDN+'/2021/12/Winter.jpg',
+        'Sochi':            CDN+'/2021/12/Sochi-city.jpg',
+        'Saint Petersburg': CDN+'/2021/12/St.-Petersburg.jpg',
+      }
+      const pkgs = await payload.find({ collection: 'tour-packages', depth: 0, limit: 30 })
+      for (const p of pkgs.docs) {
+        const url = PKG_URLS[p.title as string]
+        if (noImg(p.imageUrl) && url) await payload.update({ collection: 'tour-packages', id: p.id, data: { imageUrl: url } })
+      }
+      payload.logger.info('✅ Tour packages imageUrl backfilled')
+    } catch (_) {}
+
+    // Itineraries — match by slug
+    try {
+      const ITIN_URLS: Record<string,string> = {
+        'sochi':             CDN+'/2022/02/Sochi-beach.jpg',
+        'saint-petersburg':  CDN+'/2022/02/petersburg-St.Isaak-cathedral.jpg',
+        'murmansk':          CDN+'/2022/02/aerial-view-of-murmansk-in-the-summer-2021-10-13-17-03-10-utc.jpg',
+        'moscow-spb-sochi':  CDN+'/2022/01/banner-inner.jpg',
+        'moscow-spb':        CDN+'/2022/02/Moscow-Ukraine-hotel.jpg',
+        'golden-ring-tour':  CDN+'/2022/02/Petersburg-Hermitage.jpg',
+        'moscow-sochi':      CDN+'/2022/02/Moscow-VDNH.jpg',
+        'moscow':            CDN+'/2022/02/Moscow-GUM-mall.jpg',
+        // legacy seed slugs
+        'sochi-tour':           CDN+'/2022/02/Sochi-beach.jpg',
+        'spb-moscow-tour':      CDN+'/2022/02/petersburg-St.Isaak-cathedral.jpg',
+        'murmansk-moscow-tour': CDN+'/2022/02/aerial-view-of-murmansk-in-the-summer-2021-10-13-17-03-10-utc.jpg',
+        'moscow-tour':          CDN+'/2022/02/Moscow-GUM-mall.jpg',
+        'moscow-sochi-tour':    CDN+'/2022/02/Moscow-VDNH.jpg',
+        'golden-ring-tour-slug':CDN+'/2022/02/Petersburg-Hermitage.jpg',
+        'moscow-spb-tour':      CDN+'/2022/02/Moscow-Ukraine-hotel.jpg',
+        'moscow-spb-sochi-tour':CDN+'/2022/01/banner-inner.jpg',
+      }
+      const itins = await payload.find({ collection: 'itineraries', depth: 0, limit: 30 })
+      for (const it of itins.docs) {
+        const slug = (it as any).slug as string
+        const url = ITIN_URLS[slug]
+        if (noImg(it.imageUrl) && url) await payload.update({ collection: 'itineraries', id: it.id, data: { imageUrl: url } })
+      }
+      payload.logger.info('✅ Itineraries imageUrl backfilled')
+    } catch (_) {}
+
+    // Explore listings — match by destinationName
+    try {
+      const EXPLORE_URLS: Record<string,string> = {
+        'Saint Petersburg': CDN+'/2021/12/St.-Petersburg.jpg',
+        'Sochi':            CDN+'/2021/12/Sochi-city.jpg',
+        'Kazan':            CDN+'/2021/12/Winter.jpg',
+        'Golden Ring':      CDN+'/2021/12/golden-ring-3.jpg',
+        'Moscow':           CDN+'/2022/01/siberian-winter-inspiration_t20_z2x4J4-scaled.jpg',
+        'Murmansk':         CDN+'/2022/02/aerial-view-of-murmansk-in-the-summer-2021-10-13-17-03-10-utc.jpg',
+      }
+      const listings = await payload.find({ collection: 'explore-listings', depth: 0, limit: 30 })
+      for (const l of listings.docs) {
+        const name = (l as any).destinationName as string
+        const url = EXPLORE_URLS[name]
+        if (noImg(l.imageUrl) && url) await payload.update({ collection: 'explore-listings', id: l.id, data: { imageUrl: url } })
+      }
+      payload.logger.info('✅ Explore listings imageUrl backfilled')
+    } catch (_) {}
+
+    // Home banner slides — use destination hero images as fallback
+    try {
+      const BANNER_POOL = [
+        CDN+'/2022/01/banner-inner.jpg',
+        CDN+'/2021/12/St.-Petersburg.jpg',
+        CDN+'/2022/02/Sochi-beach.jpg',
+        CDN+'/2022/02/aerial-view-of-murmansk-in-the-summer-2021-10-13-17-03-10-utc.jpg',
+      ]
+      const banners = await payload.find({ collection: 'home-banner-slides', depth: 0, limit: 20 })
+      let bi = 0
+      for (const b of banners.docs) {
+        if (noImg(b.imageUrl)) {
+          await payload.update({ collection: 'home-banner-slides', id: b.id, data: { imageUrl: BANNER_POOL[bi % BANNER_POOL.length] } })
+          bi++
+        }
+      }
+      payload.logger.info('✅ Home banner slides imageUrl backfilled')
+    } catch (_) {}
+
+    // Explore & Itineraries banner slides
+    try {
+      const SLIDE_POOL = [
+        CDN+'/2022/02/aerial-view-of-murmansk-in-the-summer-2021-10-13-17-03-10-utc.jpg',
+        CDN+'/2021/12/St.-Petersburg.jpg',
+        CDN+'/2022/02/Sochi-beach.jpg',
+        CDN+'/2022/01/siberian-winter-inspiration_t20_z2x4J4-scaled.jpg',
+      ]
+      for (const col of ['explore-banner-slides', 'itineraries-banner-slides'] as const) {
+        const slides = await payload.find({ collection: col as any, depth: 0, limit: 20 })
+        let si = 0
+        for (const s of slides.docs) {
+          if (noImg((s as any).imageUrl)) {
+            await payload.update({ collection: col as any, id: s.id, data: { imageUrl: SLIDE_POOL[si % SLIDE_POOL.length] } })
+            si++
+          }
+        }
+      }
+      payload.logger.info('✅ Banner slides imageUrl backfilled')
+    } catch (_) {}
+
+    // Package banner slides — already have imageUrl set; skip
+
+    // Excursions (homeFeature=true destination overview cards)
+    try {
+      const EXC_URLS: Record<string,string> = {
+        'Murmansk':         CDN+'/2022/02/aerial-view-of-murmansk-in-the-summer-2021-10-13-17-03-10-utc.jpg',
+        'Moscow':           CDN+'/2022/01/siberian-winter-inspiration_t20_z2x4J4-scaled.jpg',
+        'Golden Ring':      CDN+'/2021/12/golden-ring-3.jpg',
+        'Kazan':            CDN+'/2021/12/Winter.jpg',
+        'Sochi':            CDN+'/2021/12/Sochi-city.jpg',
+        'Saint Petersburg': CDN+'/2021/12/St.-Petersburg.jpg',
+      }
+      const excs = await payload.find({ collection: 'excursions', depth: 0, limit: 100 })
+      for (const e of excs.docs) {
+        const url = EXC_URLS[e.title as string]
+        if (noImg(e.imageUrl) && url) await payload.update({ collection: 'excursions', id: e.id, data: { imageUrl: url } })
+      }
+      payload.logger.info('✅ Excursions imageUrl backfilled')
+    } catch (_) {}
+
   },
   admin: {
     user: Users.slug,
